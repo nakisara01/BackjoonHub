@@ -8,8 +8,8 @@ chk = [False] * (N + 1)
 
 def recur(num):
     if num == M:
-        # print(' '.join(map(str, rs)))
-        print(*rs)
+        print(' '.join(map(str, rs)))
+        # print(*rs)
         return
 
     for i in range(1, N + 1):
