@@ -1,28 +1,29 @@
 import sys
 input = sys.stdin.readline
 
-vertex = int(input())
-line = int(input())
+from collections import deque
 
-visited = [False] * (vertex+1)
-graph = [[] for _ in range(vertex+1)]
+com = int(input())
+graph = [[] for _ in range(com + 1)]
+chk = [False] * (com + 1)
 
-for _ in range(line):
-    x,y = map(int, input().split())
-    if x not in graph[y]:
-        graph[y].append(x)
-    if y not in graph[x]:
-        graph[x].append(y)
+for i in range(int(input())):
+    n, m = map(int, input().split())
+    graph[n].append(m)
+    graph[m].append(n)
 
-def DFS(start):
+def BFS(graph, start, visited):
+    q = deque()
+    q.append(start)
     visited[start] = True
-    for i in graph[start]:
-        if not visited[i]:
-            DFS(i)
 
-DFS(1)
-cnt = 0
-for i in visited:
-    if i == True:
-        cnt+=1
-print(cnt-1)
+    while q:
+        now = q.popleft()
+        for next in graph[now]:
+            if not visited[next]:
+                visited[next] = True
+                q.append(next)
+
+BFS(graph, 1, chk)
+
+print(sum(chk) - 1)
