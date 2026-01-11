@@ -12,18 +12,13 @@ for i in range(int(input())):
     graph[n].append(m)
     graph[m].append(n)
 
-def BFS(graph, start, visited):
-    q = deque()
-    q.append(start)
+def DFS(graph, start, visited):
     visited[start] = True
 
-    while q:
-        now = q.popleft()
-        for next in graph[now]:
-            if not visited[next]:
-                visited[next] = True
-                q.append(next)
+    for next in graph[start]:
+        if not visited[next]:
+            DFS(graph, next, chk)
 
-BFS(graph, 1, chk)
+DFS(graph, 1, chk)
 
 print(sum(chk) - 1)
