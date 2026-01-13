@@ -2,42 +2,32 @@ import sys
 input = sys.stdin.readline
 
 N, C = map(int, input().split())
-address = []
+houses = []
 
-for _ in range(N):
-    tmp = int(input())
-    address.append(tmp)
+for i in range(N):
+    houses.append(int(input()))
 
-address.sort()
+houses.sort()
 
-start = 0
-end = address[N-1]
-
-def can_place(distance):
+def check(d):
     cnt = 1
-    last = address[0]
-
-    for house in address[1:]:
-        if house - last >= distance:
+    last = houses[0]
+    for i in range(1, N):
+        if last + d <= houses[i]:
             cnt += 1
-            last = house
-                
-        if cnt == C:
-            return True
+            last = houses[i]
+    return cnt >= C
 
-    return False
-
-left = 1
-right = address[-1] - address[0]
+start, end = 0, houses[-1] - houses[0]
 ans = 0
 
-while left <= right:
-    mid = (left + right) // 2
-    
-    if can_place(mid):
+while start <= end:
+    mid = (start + end) // 2
+
+    if check(mid):
         ans = mid
-        left = mid + 1
+        start = mid + 1
     else:
-        right = mid - 1
+        end = mid - 1
 
 print(ans)
