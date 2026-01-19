@@ -1,26 +1,32 @@
-from collections import deque
-
 import sys
 input = sys.stdin.readline
 
-n, m = map(int, input(). split())
-map = [list(map(int, input().strip())) for _ in range(n)]
+from collections import deque
 
-dx = [0, 1, 0, -1]
-dy = [1, 0, -1, 0]
+N, M = map(int, input().split())
+graph = [list(map(int, input().strip())) for _ in range(N)]
+dist = [[-1] * M for _ in range(N)]
 
-def bfs(y, x):
+dx = [1, 0, -1, 0]
+dy = [0, -1, 0, 1]
+
+def bfs():
     q = deque()
-    q.append((y, x))
-    while q:
-        y, x = q.popleft()
-        for i in range(4):
-            ny = y + dy[i]
-            nx = x + dx[i]
-            if 0 <= ny < n and 0 <= nx < m:
-                if map[ny][nx] == 1:
-                    map[ny][nx] = map[y][x] + 1
-                    q.append((ny, nx))
-    return map[n-1][m-1]
+    q.append((0, 0))
+    dist[0][0] = 1
 
-print(bfs(0,0))
+    while q:
+        ey, ex = q.popleft()
+        for i in range(4):
+            ny = ey + dy[i]
+            nx = ex + dx[i]
+
+            if 0 <= ny < N and 0 <= nx < M:
+                if ny + 1 == N and nx + 1 == M:
+                    dist[ny][nx] = dist[ey][ex] + 1
+                    return dist[ny][nx]
+                elif graph[ny][nx] == 1 and dist[ny][nx] == -1:
+                    dist[ny][nx] = dist[ey][ex] + 1
+                    q.append((ny, nx))
+
+print(bfs())
