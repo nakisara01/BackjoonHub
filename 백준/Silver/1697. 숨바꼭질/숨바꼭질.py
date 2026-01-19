@@ -6,36 +6,24 @@ from collections import deque
 N, K = map(int, input().split())
 dist = [-1] * 100001
 
-def operations(x, i):
-    if i == 0:
-        x += 1
-        return x
-    elif i == 1:
-        x -=1
-        return x
-    else:
-        x = x * 2
-        return x
-
-if N == K:
-    print(0)
-    exit()
-
-def bfs(now, goal):
-    dist[now] = 0
+def bfs():
     q = deque()
-    q.append(now)
+    q.append(N)
+    dist[N] = 0
+    
+    if N == K:
+        return 0
+
     while q:
         x = q.popleft()
-        for i in range(3):
-            tmp = operations(x, i)
-            if tmp < 0 or tmp > 100000: 
-                continue
-            if tmp == goal:
-                dist[tmp] = dist[x] + 1
-                return dist[goal]
-            elif dist[tmp] == -1:
-                q.append(tmp)
-                dist[tmp] = dist[x] + 1
 
-print(bfs(N, K))
+        for next in [x + 1, x - 1, x * 2]:
+            if not 0 <= next <= 100000: continue
+
+            if next == K:
+                return dist[x] + 1
+            elif next != K and dist[next] == -1:
+                dist[next] = dist[x] + 1
+                q.append(next)
+
+print(bfs())
