@@ -1,36 +1,46 @@
-n = int(input())
+import sys
+input = sys.stdin.readline
 
-group = 0
-apart = []
-house_counts = []
+from collections import deque
 
-for _ in range(n):
-    row = list(map(int, input()))
-    apart.append(row)
-    if len(row) != n:
-        print("apart group size error")
-        exit()
+N = int(input())
 
-def DFS(x, y):
-    if x < 0 or y < 0 or x >= n or y >= n:
-        return 0
-    if apart[x][y] == 1:
-        apart[x][y] = 0
-        count = 1
-        count += DFS(x, y - 1)
-        count += DFS(x - 1, y)
-        count += DFS(x + 1, y)
-        count += DFS(x, y + 1)
-        return count
-    return 0
+graph = [list(map(int, input().strip())) for _ in range(N)]
+visited = [[False for _ in range(N)] for _ in range(N)]
 
-for i in range(n):
-    for j in range(n):
-        count = DFS(i, j)
-        if count > 0:
-            house_counts.append(count)
-            group += 1
+cnt = 0
+cnt_list = []
 
-print(group)
-for count in sorted(house_counts):
-    print(count)
+dy = [1, -1, 0, 0]
+dx = [0, 0, 1, -1]
+
+def bfs(y, x):
+    q = deque()
+    q.append((y,x))
+    visited[y][x] = True
+
+    rs = 1
+
+    while q:
+        y, x = q.popleft()
+
+        for i in range(4):
+            ny = y + dy[i]
+            nx = x + dx[i]
+
+            if 0 <= ny < N and 0 <= nx < N:
+                if visited[ny][nx] == False and graph[ny][nx] == 1:
+                    visited[ny][nx] = True
+                    q.append((ny, nx))
+                    rs += 1
+    cnt_list.append(rs)
+
+for i in range(N):
+    for j in range(N):
+        if graph[i][j] == 1 and visited[i][j] == False:
+            bfs(i, j)
+            cnt += 1
+
+print(cnt)
+cnt_list.sort()
+print(*cnt_list, sep = "\n")
