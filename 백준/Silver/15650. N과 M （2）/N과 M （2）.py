@@ -1,0 +1,18 @@
+import sys
+input = sys.stdin.readline
+
+N, M = map(int, input().split())
+
+arr = []
+
+def dfs(depth, start):
+    if depth == M :
+        print(*arr)
+        return
+    
+    for i in range(start, N + 1):
+        arr.append(i)
+        dfs(depth + 1, i + 1)
+        arr.pop()
+
+dfs(0, 1)
