@@ -3,21 +3,22 @@ input = sys.stdin.readline
 
 N, M = map(int, input().split())
 
-rs = []
-chk = [False] * (N + 1)
+arr = []
+visited = [False] * (N + 1)
 
-def recur(num):
-    if num == M:
-        print(' '.join(map(str, rs)))
-        # print(*rs)
+def dfs(depth):
+    if depth == M:
+        print(*arr)
         return
 
     for i in range(1, N + 1):
-        if chk[i] == False:
-            chk[i] = True
-            rs.append(i)
-            recur(num+1)
-            chk[i] = False
-            rs.pop()
+        if visited[i] == False:
+            visited[i] = True
+            arr.append(i)
 
-recur(0)
+            dfs(depth + 1)
+            
+            arr.pop()
+            visited[i] = False
+
+dfs(0)
