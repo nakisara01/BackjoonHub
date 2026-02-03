@@ -1,35 +1,46 @@
-n, m = map(int, input().split())
+import sys
+input = sys.stdin.readline
 
-Frame = []
-for _ in range(n):
-    Row = list(map(int, input().split()))
-    Frame.append(Row)
+from collections import deque
 
-def DFS_iterative(x, y):
-    stack = [(x, y)]
-    size = 0
-    while stack:
-        cx, cy = stack.pop()
-        if cx < 0 or cy < 0 or cx >= n or cy >= m:
-            continue
-        if Frame[cx][cy] == 1:
-            Frame[cx][cy] = 0
-            size += 1
-            stack.append((cx - 1, cy))  # 상
-            stack.append((cx + 1, cy))  # 하
-            stack.append((cx, cy - 1))  # 좌
-            stack.append((cx, cy + 1))  # 우
-    return size
+N, M = map(int, input().split())
 
-num_pictures = 0
-max_area = 0
+graph = [list(map(int, input().split())) for _ in range(N)]
+visited = [[False] * M for _ in range(N)]
 
-for i in range(n):
-    for j in range(m):
-        if Frame[i][j] == 1:
-            area = DFS_iterative(i, j)
-            num_pictures += 1
-            max_area = max(max_area, area)
+res = [0]
 
-print(num_pictures)
-print(max_area)
+dx = [0, 0, -1, 1]
+dy = [1, -1 , 0, 0]
+
+def bfs(y, x):
+    q = deque()
+    q.append((y,x))
+    visited[y][x] = True
+    cnt = 1
+
+    while q:
+        tmpy, tmpx = q.popleft()
+
+        for i in range(4):
+            ny = tmpy + dy[i]
+            nx = tmpx + dx[i]
+
+            if 0 <= ny < N and 0 <= nx < M:
+                if graph[ny][nx] == 1 and visited[ny][nx] == False:
+                    q.append((ny,nx))
+                    visited[ny][nx] = True
+                    cnt += 1
+    return cnt
+
+for j in range(N):
+    for i in range(M):
+        if visited[j][i] == False and graph[j][i] == 1:
+            res.append(bfs(j,i))
+
+if len(res) == 1:
+    print(0)
+    print(0)
+else:
+    print(len(res) - 1)
+    print(max(res))
